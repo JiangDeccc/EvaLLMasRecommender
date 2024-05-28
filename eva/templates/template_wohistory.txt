@@ -1,0 +1,1 @@
+Please select the top 10 items from the list of candidates below that {dataset} user {user_name} is most likely to buy next, and rank them in descending order of likelihood. The candidates are: {candidate_list}.

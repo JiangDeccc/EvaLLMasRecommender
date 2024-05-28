@@ -1,0 +1,5 @@
+Considering {dataset} user {user_name} has interacted with {dataset} items (from the earlier to the later) {user_history} , the user next interacted with {target}.
+Here is the purchase history of {dataset} user {user_name} (from the earlier to the later): {dataset} item {user_history}, and the user next interacted with {target}.
+{dataset} user {user_name} has purchased {dataset} items (from the earlier to the later) {user_history} and the user next interacted with {target}.
+The {dataset} user {user_name} has bought items (from the earlier to the later): {dataset} items {user_history}. Then the user next interacted with {target}.
+According to what items {dataset} user {user_name} has purchased (from the earlier to the later): {dataset} items {user_history}. Then the user next interacted with {target}.
