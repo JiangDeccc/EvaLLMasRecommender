@@ -7,7 +7,7 @@
 - ./eva/templates: templates of different task
 - ./eva/codes: instruction construction, LLM as recommender, output parsing, multi-dimensional evaluation
 
-./recbole: traditional models
+./rechorus: traditional models
 
 ./sota_results: results of SOTA models (example)
 
