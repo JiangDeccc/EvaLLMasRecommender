@@ -4,7 +4,7 @@
 
 We propose a multidimensional evaluation framework of LLMs as recommenders, including two conventional dimensions, utility and beyond-utility, and four newly introduced LLM-related dimensions, history length sensitivity, candidate position bias, generation-involved performance and hallucination. Our framework adopts the commonly-used LLM-as-recommender paradigm and considers two specific tasks, ranking and re-ranking, the primary difference of which lies in the formation methods of the candidate sets. Considering the cost, our framework supports evaluation on small sample datasets, with K-S test to ensure the validity of the random sampling. After obtaining the recommendations from the LLM, our evaluation includes six dimensions: two conventional dimensions and four newly proposed dimensions. These four new dimensions focus on the potential new impacts that LLMs might bring to recommendations.
 
-![architecture](.\assets\architecture.jpg)
+![architecture](./assets/architecture.jpg)
 
 
 
