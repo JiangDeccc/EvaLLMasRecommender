@@ -40,6 +40,7 @@ def read_list(path):
     return test_samples
 
 def read_meta(dataset):
+    """Read the item meta data and map item id to item name and categories."""
     f = open(f'../../data/{dataset}/datamaps.json', 'r')
     content = f.read()
     data_maps = json.loads(content)
@@ -65,6 +66,7 @@ def read_meta(dataset):
     return name2item_id, id2categories
 
 def resultsMap(title_str):
+    """Map the title string to a standardized format."""
     if type(title_str) == list:
         title_str = title_str[0]
     title_str = title_str.replace("\\'", "\'")
@@ -82,6 +84,7 @@ def create_pattern(target):
     return pattern
 
 def mapTitle2itemid(title, name2item_id, name_str):
+    """Map the title to item id."""
     item_id = int(name2item_id.get(title, '0'))
     if item_id == 0:
         pattern = create_pattern(title)
@@ -186,6 +189,14 @@ def read_llm_results(results_path, name2item_id, name_str, test_len, model=None,
     return id_results, id_targets
 
 def read_sota_results(dataset, model, test_samples, sample, history_max, shuffle, random_seed, cand_len=20):
+    """Read the SOTA results.
+    Args:
+        dataset (str): The dataset name.
+        model (str): The SOTA model name.
+        test_samples (list): The test samples.
+        sample (list): The sampled user ids.
+    Returns:
+        id_results (list): The recommended item ids for sampled users."""
     df = pd.read_csv(f'../../sota_results/{dataset}/rec-{model}-history{history_max}-shuffle{shuffle}-seed{random_seed}.csv', sep='\t')
     results_dict = df.set_index('user_id')['rec_items'].to_dict()
     id_results = list(map(lambda x: eval(results_dict[x]), sample))
@@ -204,6 +215,15 @@ def read_sota_results(dataset, model, test_samples, sample, history_max, shuffle
 
 # MostPop Baseline
 def generate_mostpop(test_samples, negative_samples, sample, cand_len=20, sample_cand_list=[]):
+    """
+    Generate the MostPop recommendation list.
+    Args:
+        test_samples (list): The test samples.
+        negative_samples (list): The negative samples.
+        sample (list): The sampled user ids.
+    Returns:
+        pop_result (list): The MostPop recommendation list for sampled users.
+    """
     pop_result = []
     acc_result = []
     cand_list = []
@@ -390,8 +410,10 @@ if __name__ == '__main__':
     negative_samples = read_list(f"../../data/{dataset}/negative_samples.txt")
 
     if sota:
+        # SOTA results
         id_results, id_targets = read_sota_results(results_path, model_name, test_samples, sample, history_max, shuffle, random_seed)
     else:
+        # LLM results
         id_results, id_targets = read_llm_results(results_path, name2item_id, name_str, test_len)
 
     # MostPop Baseline
@@ -424,10 +446,12 @@ if __name__ == '__main__':
     high_bar = np.quantile(train_freq_value, 0.8)
     quantiles = [np.quantile(train_freq_value, x) for x in np.arange(0, 1.2, 0.2)]
     quantiles[0] -= 1
+    # Popularity bias metrics
     print('ARP:', calARP(train_id_freq_dict, id_results, metric_len))
     print('ACLT:', calACLT(id_results, train_id_freq_dict, high_bar, metric_len))
     print('PopREO:', calPopREO(hit, quantiles, train_id_freq_dict, id_targets))
     
+    # Fairness metrics
     print('Gini:', calcFairMetric(id_results, metric_len))
     print('Jain:', calJain(hit, rank))
     user_his_len_freq = list(user_his_len.values())
@@ -437,10 +461,12 @@ if __name__ == '__main__':
     hot_user = list(filter(lambda x: user_his_len[str(sample[x])] > user_bar, np.arange(0, test_len)))
     print('DPD:', calDPDFreq(hit, rank, cold_user, hot_user))
 
+    # Diversity metrics
     print('ItemCoverage:', calItemCoverage(id_results, metric_len, negative_samples, test_samples, cand_len=cand_len))
     print('Shannon:', calMeanShannon(id_results, id2categories, metric_len))
     print('Jaccard:', calMeanJaccard(id_results, metric_len, cand_list))
 
+    # novelty metrics
     print('Serendipity:', calSerendipity(hit, hit_pop))
     information = {k: np.log2(len(negative_samples)/v) for k, v in train_id_freq_dict.items()}
     print('SelfInformation:', calSelfInfo(id_results, metric_len, information))

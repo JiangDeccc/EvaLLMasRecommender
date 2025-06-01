@@ -13,7 +13,6 @@ from typing import List
 # Repeat experiments and save results to csv
 # Example: python exp.py --in_f run.sh --out_f exp.csv --n 5
 
-
 def parse_args():
     parser = argparse.ArgumentParser(description="Run")
     parser.add_argument('--log_dir', nargs='?', default='./log/',
@@ -34,6 +33,11 @@ def parse_args():
 
 
 def find_info(result: List[str]) -> dict:
+    """
+    Find the final results from the output of the command.
+    :param result: List of strings, each string is a line of output.
+    :return: Dictionary containing the final results.
+    """
     info = dict()
     prefix = ''
     for line in result:

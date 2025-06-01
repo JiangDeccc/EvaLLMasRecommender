@@ -3,6 +3,15 @@ from openai import OpenAI
 
 
 def callChatGPT_hot(prompt, model_name, client):
+  """
+  Call the OpenAI API to get a chat completion for the given prompt.
+  Args:
+    prompt (str): The prompt to send to the model.
+    model_name (str): The name of the model to use.
+    client (OpenAI): The OpenAI client instance.
+  Returns:
+    completion (object): The completion object returned by the OpenAI API.
+  """
   completion = client.chat.completions.create(
     model=model_name,
     # model="gpt-4",
@@ -15,6 +24,15 @@ def callChatGPT_hot(prompt, model_name, client):
   return completion
 
 def callChatGPT(prompt, model_name, client):
+  """
+  Call the OpenAI API to get a chat completion for the given prompt.
+  Args:
+    prompt (str): The prompt to send to the model.
+    model_name (str): The name of the model to use.
+    client (OpenAI): The OpenAI client instance.
+  Returns:
+    completion (object): The completion object returned by the OpenAI API.
+  """
   completion = client.chat.completions.create(
     model=model_name,
     # model="gpt-4",
@@ -54,6 +72,14 @@ def callChatGLM(prompt, model_name, client):
 
 
 def callLLM_hot(prompt, model_name):
+  """
+  Call the LLM with a hot model for recommendation.
+  Args:
+    prompt (str): The prompt to send to the model.
+    model_name (str): The name of the model to use.
+  Returns:
+    completion (object): The completion object returned by the model.
+  """
   if model_name == 'gpt-3.5-turbo' or model_name == 'gpt-4':
     client = OpenAI()
     return callChatGPT_hot(prompt, model_name, client)
@@ -64,6 +90,14 @@ def callLLM_hot(prompt, model_name):
     raise NotImplementedError
   
 def callLLM(prompt, model_name):
+  """
+  Call the LLM for recommendation.
+  Args:
+    prompt (str): The prompt to send to the model.
+    model_name (str): The name of the model to use.
+  Returns:
+    completion (object): The completion object returned by the model.
+  """
   if model_name == 'gpt-3.5-turbo' or model_name == 'gpt-4':
     client = OpenAI()
     return callChatGPT(prompt, model_name, client)
